@@ -3,7 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const routes = require('./src/routes');
-const prisma = require('./src/lib/prisma');
+const { PrismaClient, Prisma } = require('@prisma/client');
+const prisma = new PrismaClient();
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -20,9 +21,9 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to the Express API!' });
 });
 
-// Error handling middleware for Prisma
+// Error handling middleware
 app.use((err, req, res, next) => {
-  if (err instanceof prisma.PrismaClientKnownRequestError) {
+  if (err instanceof Prisma.PrismaClientKnownRequestError) {
     return res.status(400).json({ error: err.message });
   }
   next(err);
