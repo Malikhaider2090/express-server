@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Patient {
+  id              Int           @id @default(autoincrement())
+  email           String        @unique
+  firstName       String
+  lastName        String
+  dateOfBirth     DateTime
+  phoneNumber     String
+  address         String?
+  medicalHistory  String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Doctor {
+  id              Int           @id @default(autoincrement())
+  email           String        @unique
+  firstName       String
+  lastName        String
+  phoneNumber     String
+  categoryId      Int
+  category        Category      @relation(fields: [categoryId], references: [id])
+  bio             String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Category {
+  id          Int           @id @default(autoincrement())
+  name        CategoryType  @unique
+  description String?
+  doctors     Doctor[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Appointment {
+  id          Int               @id @default(autoincrement())
+  patientId   Int
+  doctorId    Int
+  startTime   DateTime
+  endTime     DateTime
+  status      AppointmentStatus @default(SCHEDULED)
+  notes       String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+enum CategoryType {
+  DENTIST
+  DERMATOLOGY
+  ENT
+  ORTHOPAEDIC
+  CARDIOLOGY
+  NEUROLOGY
+  PEDIATRICS
+  PSYCHIATRY
+  OPHTHALMOLOGY
+  GYNECOLOGY
+  UROLOGY
+  ONCOLOGY
+  GENERAL_MEDICINE
+  ENDOCRINOLOGY
+  GASTROENTEROLOGY
+  PULMONOLOGY
+}
