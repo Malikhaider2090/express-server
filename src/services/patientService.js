@@ -29,8 +29,9 @@ class PatientService {
     return await prisma.patient.update({
       where: { id },
       data: {
-        name: data.name,
         email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
         phoneNumber: data.phoneNumber,
         dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : undefined,
         address: data.address
