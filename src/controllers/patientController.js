@@ -33,7 +33,7 @@ class PatientController {
 
   static async updatePatient(req, res) {
     try {
-      console.log('req.body', req.params.id, req.body);
+      // console.log('req.body', req.params.id, req.body);
       const patient = await patientService.updatePatient(parseInt(req.params.id), req.body);
       if (!patient) {
         return res.status(404).json({ error: 'Patient not found' });

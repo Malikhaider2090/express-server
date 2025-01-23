@@ -37,5 +37,13 @@ process.on('SIGINT', async () => {
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server listening on port ${port}`);
+})
+.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${port} is already in use.`);
+    process.exit(1); // Exit the process with an error code
+  } else {
+    console.error('An error occurred:', err);
+  }
 });
